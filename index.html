@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuários Online</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 50px;
+        }
+        h5 {
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .table {
+            margin-top: 20px;
+        }
+        .table thead th {
+            background-color: #007bff;
+            color: white;
+        }
+        .table tbody td {
+            color: #343a40;
+        }
+    </style>
+    <script>
+    $(document).ready(function() {
+        var socket = io({
+            query: { id: new URLSearchParams(window.location.search).get('id') }
+        });
+
+            socket.on('user list', function(usersOnline) {
+                var html = '';
+                usersOnline.forEach(function(userId) {
+                    html += '<tr><td>' + userId + '</td><td>Online</td></tr>';
+                });
+                $('#userList tbody').html(html);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h5>Usuários Online</h5>
+        <table class="table" id="userList">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Os usuários serão inseridos aqui -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
