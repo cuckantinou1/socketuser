@@ -8,25 +8,47 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <style>
+        #userList {
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        #userList td, #userList th {
+            border: 1px solid #ddd;
+            padding: 4px;
+            line-height: 1.2;
+        }
+        #userList tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        #userList tr:hover {
+            background-color: #ddd;
+        }
+        .container {
+            margin-top: 0;
+        }
+        #userList th {
+            width: 100px; /* Largura fixa para os cabeçalhos 'Nome' e 'Status' */
+        }
+    </style>
     <script>
     $(document).ready(function() {
         var socket = io({
             query: { id: new URLSearchParams(window.location.search).get('id') }
         });
 
-            socket.on('user list', function(usersOnline) {
-                var html = '';
-                usersOnline.forEach(function(userId) {
-                    html += '<tr><td>' + userId + '</td><td>Online</td></tr>';
-                });
-                $('#userList tbody').html(html);
+        socket.on('user list', function(usersOnline) {
+            var html = '';
+            usersOnline.forEach(function(userId) {
+                html += '<tr><td>' + userId + '</td><td>Online</td></tr>';
             });
+            $('#userList tbody').html(html);
         });
+    });
     </script>
 </head>
 <body>
-    <div class="container mt-5">
-        <h5>Usuários Online</h5>
+    <div class="container">
         <table class="table" id="userList">
             <thead>
                 <tr>

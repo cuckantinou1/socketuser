@@ -21,13 +21,13 @@ io.on('connection', (socket) => {
     }
 
     // Emitir lista limitada a 3 usuários, excluindo o usuário 'Operador'
-    let limitedUsersOnline = usersOnline.filter(user => user !== 'Operador').slice(0, 3);
+    let limitedUsersOnline = usersOnline.filter(user => user !== 'Operador').slice(0, 10);
     io.emit('user list', limitedUsersOnline);
 
     socket.on('disconnect', () => {
         usersOnline = usersOnline.filter(user => user !== userId);
         // Emitir lista atualizada após a desconexão
-        limitedUsersOnline = usersOnline.filter(user => user !== 'Operador').slice(0, 3);
+        limitedUsersOnline = usersOnline.filter(user => user !== 'Operador').slice(0, 10);
         io.emit('user list', limitedUsersOnline);
     });
 });
