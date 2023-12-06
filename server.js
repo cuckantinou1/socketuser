@@ -14,21 +14,21 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     let userId = socket.handshake.query.id || 'Usuário Desconhecido';
-
-    if (userId !== 'Operador' && !usersOnline.includes(userId)) {
+    
+    if (userId !== 'Operador' && userId !== 'Usuário Desconhecido' && userId !== null && !usersOnline.includes(userId)) {
         usersOnline.push(userId);
     }
-
-    let limitedUsersOnline = usersOnline.filter(user => user !== 'Operador').slice(0, 10);
+    
+    let limitedUsersOnline = usersOnline.filter(user => user !== 'Operador' && user !== 'Usuário Desconhecido' && user !== null).slice(0, 10);
     io.emit('user list', limitedUsersOnline);
 
     socket.on('disconnect', () => {
         usersOnline = usersOnline.filter(user => user !== userId);
-        limitedUsersOnline = usersOnline.filter(user => user !== 'Operador').slice(0, 10);
+        usersOnline = usersOnline.filter(user => user !== 'Usuário Desconhecido' && user !== null);
+        limitedUsersOnline = usersOnline.filter(user => user !== 'Operador' && user !== 'Usuário Desconhecido' && user !== null).slice(0, 10);
         io.emit('user list', limitedUsersOnline);
     });
 });
-
 const PORT = process.env.PORT || 8080;
 
 server.listen(PORT, () => {
