@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
+const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
@@ -14,6 +15,11 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     let userId = socket.handshake.query.id || 'Usuário Desconhecido';
+    let userIp = socket.handshake.address;
+
+    fs.appendFile('log.txt', `Usuário: ${userId}, IP: ${userIp}, Data: ${new Date().toISOString()}\n`, (err) => {
+        if (err) throw err;
+    });
 
     if (userId !== 'Operador' && userId !== 'Usuário Desconhecido' && userId !== 'null' && userId !== null && !usersOnline.includes(userId)) {
         usersOnline.push(userId);
